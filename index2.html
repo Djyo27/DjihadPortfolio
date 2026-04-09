@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Djihad Chouikh | Game Tester · QA · Web Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--c:#00f5ff;--p:#b44fff;--g:#00ff88;--r:#ff3366;--a:#ffb800;--bg:#030a0f;--bg2:#050f18;--bg3:#071520;--sf:#0a1f2e;--sf2:#0d2436;--tx:#c8e8f0;--td:#5a8a9a;--tm:#2a5a6a;--bd:#0d3a4a;--bb:#1a6a80}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;line-height:1.6;overflow-x:hidden;cursor:none}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,.011) 2px,rgba(0,245,255,.011) 4px);pointer-events:none;z-index:9000}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+#cur{position:fixed;width:10px;height:10px;background:var(--c);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s,background .15s}
+#ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,245,255,.45);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .25s}
+#ptcl{position:fixed;inset:0;z-index:0;pointer-events:none}
+#pbar{position:fixed;top:64px;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--c),var(--p));z-index:1001}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 4%;height:64px;background:rgba(3,10,15,.88);border-bottom:1px solid var(--bd);backdrop-filter:blur(16px);transition:background .3s}
+nav.sc{background:rgba(3,10,15,.97)}
+.nlogo{font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:700;color:var(--c);letter-spacing:.15em;text-decoration:none;text-shadow:0 0 18px rgba(0,245,255,.5);transition:text-shadow .3s}
+.nlogo:hover{text-shadow:0 0 36px rgba(0,245,255,.95)}
+.nlogo span{color:var(--td)}
+.nl{display:flex;gap:1.5rem;list-style:none}
+.nl a{font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--td);text-decoration:none;transition:color .2s;font-family:'Rajdhani',sans-serif;position:relative;padding-bottom:3px}
+.nl a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--c);transition:width .3s}
+.nl a:hover,.nl a.ac{color:var(--c)}
+.nl a:hover::after,.nl a.ac::after{width:100%}
+.nst{display:flex;align-items:center;gap:.45rem;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--g)}
+.sdot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,136,.4)}50%{opacity:.3;box-shadow:0 0 0 6px transparent}}
+.rv{opacity:0;transform:translateY(36px);transition:opacity .6s ease,transform .6s ease}
+.rv.v{opacity:1;transform:none}
+.rl{opacity:0;transform:translateX(-36px);transition:opacity .6s ease,transform .6s ease}
+.rl.v{opacity:1;transform:none}
+.rr{opacity:0;transform:translateX(36px);transition:opacity .6s ease,transform .6s ease}
+.rr.v{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}.d6{transition-delay:.48s}
+section{padding:6rem 4%;position:relative;z-index:1}
+.si{max-width:1200px;margin:0 auto}
+.sh{margin-bottom:2.8rem}
+.stg{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--c);letter-spacing:.22em;margin-bottom:.4rem}
+.sh2{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:#fff;letter-spacing:.07em}
+.sln{height:1px;background:linear-gradient(90deg,var(--c),transparent);margin-top:.85rem;max-width:280px;transform:scaleX(0);transform-origin:left;transition:transform 1.2s ease}
+.sln.v{transform:scaleX(1)}
+.btn{padding:.8rem 1.85rem;background:transparent;font-family:'Orbitron',monospace;font-size:.67rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;cursor:none;text-decoration:none;display:inline-flex;align-items:center;gap:.45rem;transition:all .3s cubic-bezier(.23,1,.32,1);position:relative;overflow:hidden;border-radius:0}
+.bc{border:1px solid var(--c);color:var(--c)}.bp{border:1px solid var(--bb);color:var(--td)}.bg2{border:1px solid var(--g);color:var(--g)}
+.btn .bb{position:absolute;inset:0;transform:translateX(-101%);transition:transform .35s cubic-bezier(.23,1,.32,1)}
+.bc .bb{background:linear-gradient(135deg,rgba(0,245,255,.13),rgba(0,245,255,.04))}
+.bp .bb{background:linear-gradient(135deg,rgba(180,79,255,.11),rgba(180,79,255,.03))}
+.bg2 .bb{background:linear-gradient(135deg,rgba(0,255,136,.11),rgba(0,255,136,.03))}
+.btn:hover .bb{transform:translateX(0)}
+.bc:hover{color:#fff;box-shadow:0 0 26px rgba(0,245,255,.28)}
+.bp:hover{border-color:var(--p);color:var(--p);box-shadow:0 0 20px rgba(180,79,255,.18)}
+.bg2:hover{color:#fff;box-shadow:0 0 20px rgba(0,255,136,.2)}
+.btn:active{transform:scale(.96)}
+#hero{min-height:100vh;display:flex;align-items:center;padding:5rem 4% 3rem;position:relative;z-index:1}
+.hi{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 400px;gap:4rem;align-items:center}
+.htag{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--c);letter-spacing:.2em;margin-bottom:1.3rem;display:flex;align-items:center;gap:.65rem;opacity:0;animation:fu .7s .1s forwards}
+.htag::before{content:'//';opacity:.45}
+.hn{font-family:'Orbitron',monospace;font-size:clamp(2.3rem,5.5vw,4.3rem);font-weight:900;line-height:1;color:#fff;margin-bottom:.2rem;letter-spacing:.05em;opacity:0;animation:fu .7s .2s forwards,glitch 9s 1.5s infinite}
+.hn .acc{color:var(--c);text-shadow:0 0 26px rgba(0,245,255,.55)}
+.hsub{font-family:'Rajdhani',sans-serif;font-size:.83rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--td);margin-bottom:1.9rem;opacity:0;animation:fu .7s .3s forwards}
+#tw{font-size:.95rem;color:var(--tx);line-height:1.85;max-width:500px;margin-bottom:2.3rem;min-height:3.6rem;opacity:0;animation:fu .7s .4s forwards}
+.cb{display:inline-block;width:2px;height:1em;background:var(--c);vertical-align:text-bottom;animation:blink .8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hbtns{display:flex;gap:.85rem;flex-wrap:wrap;opacity:0;animation:fu .7s .5s forwards}
+.hpanel{display:flex;flex-direction:column;gap:.85rem;opacity:0;animation:fu .7s .65s forwards}
+.pc{background:var(--sf);border:1px solid var(--bd);padding:1.1rem 1.35rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.pc:hover{border-color:var(--bb);transform:translateX(4px)}
+.pc::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--c)}
+.pc.pu::before{background:var(--p)}.pc.gr::before{background:var(--g)}
+.pclbl{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--c);letter-spacing:.2em;margin-bottom:.22rem}
+.pc.pu .pclbl{color:var(--p)}.pc.gr .pclbl{color:var(--g)}
+.pcv{font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:600;color:#fff}
+.pcs{font-size:.68rem;color:var(--td);margin-top:.1rem;font-family:'Share Tech Mono',monospace}
+.hst{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.sb{background:var(--sf2);border:1px solid var(--bd);padding:.88rem;text-align:center;transition:border-color .3s,transform .3s;position:relative;overflow:hidden}
+.sb:hover{border-color:var(--bb);transform:translateY(-3px)}
+.sb::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--c);transform:scaleX(0);transition:transform .3s}
+.sb:hover::after{transform:scaleX(1)}
+.sn{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--c)}
+.sl{font-family:'Share Tech Mono',monospace;font-size:.57rem;color:var(--td);margin-top:.16rem;letter-spacing:.1em;text-transform:uppercase}
+.cd{position:relative}
+.cd::before,.cd::after{content:'';position:absolute;width:13px;height:13px;transition:all .35s;z-index:2}
+.cd::before{top:0;left:0;border-top:2px solid var(--c);border-left:2px solid var(--c)}
+.cd::after{bottom:0;right:0;border-bottom:2px solid var(--c);border-right:2px solid var(--c)}
+.cd:hover::before{top:-4px;left:-4px}.cd:hover::after{bottom:-4px;right:-4px}
+#about{background:var(--bg2)}
+.ag{display:grid;grid-template-columns:300px 1fr;gap:4rem;align-items:start}
+.pf{position:relative;overflow:hidden;border:1px solid var(--bb);aspect-ratio:3/4;animation:ppulse 4.5s ease infinite}
+@keyframes ppulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 22px 2px rgba(0,245,255,.1)}}
+.pf img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;filter:brightness(.92) contrast(1.08) saturate(.88);transition:transform .55s cubic-bezier(.23,1,.32,1),filter .35s}
+.pf:hover img{transform:scale(1.055);filter:brightness(1) contrast(1.06) saturate(1.1)}
+.pov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 52%,rgba(3,10,15,.88) 100%);pointer-events:none;z-index:2}
+.psc{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:.4;animation:sc 3.5s linear infinite;pointer-events:none;z-index:3}
+@keyframes sc{0%{top:-2px;opacity:0}8%{opacity:.4}92%{opacity:.4}100%{top:100%;opacity:0}}
+.ptag{position:absolute;bottom:.85rem;left:.85rem;right:.85rem;background:rgba(3,10,15,.9);border:1px solid var(--bb);padding:.6rem .85rem;backdrop-filter:blur(8px);z-index:4}
+.ptn{font-family:'Orbitron',monospace;font-size:.7rem;color:#fff;letter-spacing:.1em}
+.ptr{font-family:'Share Tech Mono',monospace;font-size:.57rem;color:var(--c);margin-top:.15rem}
+.hd{position:absolute;width:13px;height:13px;z-index:5;transition:all .4s}
+.tl{top:7px;left:7px;border-top:2px solid var(--c);border-left:2px solid var(--c)}
+.tr{top:7px;right:7px;border-top:2px solid var(--c);border-right:2px solid var(--c)}
+.bl{bottom:7px;left:7px;border-bottom:2px solid var(--c);border-left:2px solid var(--c)}
+.br2{bottom:7px;right:7px;border-bottom:2px solid var(--c);border-right:2px solid var(--c)}
+.pf:hover .tl{top:3px;left:3px}.pf:hover .tr{top:3px;right:3px}.pf:hover .bl{bottom:3px;left:3px}.pf:hover .br2{bottom:3px;right:3px}
+.at p{font-size:.91rem;color:var(--tx);line-height:1.88;margin-bottom:1.1rem}
+.ai{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin:1.7rem 0}
+.ib{background:var(--sf);border:1px solid var(--bd);padding:.85rem;transition:border-color .3s,transform .3s;cursor:default}
+.ib:hover{border-color:var(--bb);transform:translateY(-3px)}
+.il{font-family:'Share Tech Mono',monospace;font-size:.57rem;color:var(--c);letter-spacing:.13em;margin-bottom:.26rem}
+.iv{font-size:.83rem;color:var(--tx);font-weight:500}
+.lr{display:flex;flex-wrap:wrap;gap:.42rem;margin-top:1.3rem}
+.lb{font-family:'Share Tech Mono',monospace;font-size:.63rem;padding:.3rem .78rem;border:1px solid var(--bb);color:var(--c);letter-spacing:.1em;transition:all .3s;cursor:default}
+.lb:hover{background:rgba(0,245,255,.08);border-color:var(--c);transform:translateY(-2px)}
+#skills{background:var(--bg3)}
+.skg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.skc{background:var(--sf);border:1px solid var(--bd);padding:1.55rem;transition:border-color .4s,transform .4s,box-shadow .4s;position:relative;overflow:hidden;cursor:default}
+.skc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c),transparent)}
+.skc.p2::after{background:linear-gradient(90deg,var(--p),transparent)}.skc.gc::after{background:linear-gradient(90deg,var(--g),transparent)}.skc.ac::after{background:linear-gradient(90deg,var(--a),transparent)}
+.skc:hover{border-color:var(--bb);transform:translateY(-5px) scale(1.01);box-shadow:0 18px 36px rgba(0,0,0,.38)}
+.ss{position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,245,255,.055) 0%,transparent 58%);opacity:0;transition:opacity .3s;pointer-events:none}
+.skc:hover .ss{opacity:1}
+.si2{font-family:'Orbitron',monospace;font-size:.67rem;font-weight:700;color:var(--c);letter-spacing:.1em;margin-bottom:.88rem;display:flex;align-items:center;gap:.4rem}
+.si2::before{content:'[';opacity:.35}.si2::after{content:']';opacity:.35}
+.skc.p2 .si2{color:var(--p)}.skc.gc .si2{color:var(--g)}.skc.ac .si2{color:var(--a)}
+.skc h3{font-family:'Rajdhani',sans-serif;font-size:1.03rem;font-weight:700;color:#fff;letter-spacing:.07em;margin-bottom:1.05rem}
+.skl{list-style:none}
+.skl li{font-size:.78rem;color:var(--td);padding:.35rem 0;border-bottom:1px solid rgba(0,245,255,.05);display:flex;align-items:center;justify-content:space-between;font-family:'Share Tech Mono',monospace;transition:color .2s}
+.skl li:hover{color:var(--tx)}
+.skl li::before{content:'>';color:var(--c);margin-right:.42rem;font-size:.6rem;flex-shrink:0}
+.skc.p2 .skl li::before{color:var(--p)}.skc.gc .skl li::before{color:var(--g)}.skc.ac .skl li::before{color:var(--a)}
+.bar{display:flex;gap:2px;flex-shrink:0}
+.bar span{width:5px;height:5px;background:var(--bd)}
+.bar span.on{background:var(--c)}
+.skl li:hover .bar span.on{transform:scaleY(1.3);transition:transform .2s}
+.skc.p2 .bar span.on{background:var(--p)}.skc.gc .bar span.on{background:var(--g)}.skc.ac .bar span.on{background:var(--a)}
+#experience{background:var(--bg2)}
+.tl2{position:relative;padding-left:2.35rem}
+.tl2::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--c),var(--p),var(--g),var(--a),transparent)}
+.ti{position:relative;margin-bottom:3rem;transition:transform .3s}
+.ti:hover{transform:translateX(5px)}
+.td{position:absolute;left:-2.6rem;top:.26rem;width:11px;height:11px;border:2px solid var(--c);background:var(--bg);transform:rotate(45deg);transition:background .3s,box-shadow .3s}
+.ti:hover .td{background:var(--c);box-shadow:0 0 11px var(--c)}
+.ti:first-child .td{background:var(--c)}
+.tdt{font-family:'Share Tech Mono',monospace;font-size:.64rem;color:var(--c);letter-spacing:.14em;margin-bottom:.42rem}
+.tr2{font-family:'Rajdhani',sans-serif;font-size:1.28rem;font-weight:700;color:#fff;letter-spacing:.04em;margin-bottom:.1rem}
+.tc{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--td);margin-bottom:.85rem}
+.tls{list-style:none;display:flex;flex-direction:column;gap:.38rem}
+.tls li{font-size:.84rem;color:var(--tx);line-height:1.7;display:flex;gap:.65rem;align-items:flex-start}
+.tls li::before{content:'//';color:var(--c);flex-shrink:0;font-family:'Share Tech Mono',monospace;font-size:.66rem;margin-top:.1rem}
+#projects{background:var(--bg3)}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.prc{background:var(--sf);border:1px solid var(--bd);overflow:hidden;transition:border-color .35s,transform .35s,box-shadow .35s;cursor:default}
+.prc:hover{border-color:var(--bb);transform:translateY(-5px);box-shadow:0 16px 34px rgba(0,0,0,.4)}
+.pt{height:150px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;font-family:'Orbitron',monospace;font-size:2.6rem;font-weight:900}
+.pt1{background:linear-gradient(135deg,#071520,#0a2535)}.pt2{background:linear-gradient(135deg,#120716,#1a0a22)}.pt3{background:linear-gradient(135deg,#071a10,#0a2218)}
+.pt span{position:relative;z-index:1;opacity:.22}
+.pt::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,var(--sf) 100%)}
+.ptag2{position:absolute;top:.72rem;right:.72rem;font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.1em;padding:.2rem .55rem;z-index:1}
+.pc2t{background:rgba(0,245,255,.11);color:var(--c);border:1px solid rgba(0,245,255,.22)}
+.pp2t{background:rgba(180,79,255,.09);color:var(--p);border:1px solid rgba(180,79,255,.2)}
+.pg2t{background:rgba(0,255,136,.07);color:var(--g);border:1px solid rgba(0,255,136,.18)}
+.pb{padding:1.25rem}
+.pcat{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--c);letter-spacing:.14em;margin-bottom:.38rem}
+.ptit{font-family:'Rajdhani',sans-serif;font-size:1.06rem;font-weight:700;color:#fff;margin-bottom:.6rem;line-height:1.25}
+.pdsc{font-size:.78rem;color:var(--td);line-height:1.68;margin-bottom:.9rem}
+.pstk{display:flex;flex-wrap:wrap;gap:.32rem}
+.pst{font-size:.6rem;padding:.18rem .5rem;border:1px solid var(--bd);color:var(--tm);font-family:'Share Tech Mono',monospace;transition:border-color .2s,color .2s}
+.prc:hover .pst{border-color:var(--bb);color:var(--td)}
+#games{background:var(--bg2)}
+.gintro{font-size:.9rem;color:var(--td);line-height:1.85;max-width:700px;margin-bottom:2.8rem}
+.gg{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+.gc2{background:var(--sf);border:1px solid var(--bd);overflow:hidden;transition:border-color .35s,transform .35s,box-shadow .35s;cursor:pointer;position:relative}
+.gc2:hover{border-color:var(--bb);transform:translateY(-5px);box-shadow:0 16px 34px rgba(0,0,0,.45)}
+.gth{height:130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.gv{background:linear-gradient(135deg,#0a1e34,#0d2a42)}.gm{background:linear-gradient(135deg,#0d1a08,#152608)}.gcs{background:linear-gradient(135deg,#1a0a06,#250f08)}.gl{background:linear-gradient(135deg,#0a0d1e,#0e1228)}.gax{background:linear-gradient(135deg,#1a0605,#240c08)}.gcod{background:linear-gradient(135deg,#080f0a,#0c1510)}.gr6{background:linear-gradient(135deg,#0a0e1a,#0e1424)}.gow{background:linear-gradient(135deg,#080d1a,#0c1224)}
+.gico{font-size:2.6rem;z-index:1;filter:drop-shadow(0 0 7px rgba(0,245,255,.28))}
+.gth::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,var(--sf) 100%)}
+.gbg{position:absolute;top:.55rem;left:.55rem;font-family:'Share Tech Mono',monospace;font-size:.53rem;letter-spacing:.1em;padding:.16rem .48rem;z-index:2}
+.gfps{background:rgba(255,51,102,.11);color:var(--r);border:1px solid rgba(255,51,102,.22)}
+.gsnd{background:rgba(0,255,136,.07);color:var(--g);border:1px solid rgba(0,255,136,.18)}
+.gbr{background:rgba(255,184,0,.09);color:var(--a);border:1px solid rgba(255,184,0,.2)}
+.gmb{background:rgba(180,79,255,.09);color:var(--p);border:1px solid rgba(180,79,255,.2)}
+.gbdy{padding:.9rem}
+.gtt{font-family:'Rajdhani',sans-serif;font-size:.97rem;font-weight:700;color:#fff;margin-bottom:.25rem}
+.gdv{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--tm);margin-bottom:.48rem}
+.gdc{font-size:.74rem;color:var(--td);line-height:1.62;display:none}
+.gc2:hover .gdc{display:block}
+.grt{display:flex;align-items:center;gap:.28rem;margin-top:.55rem}
+.gstr{color:var(--a);font-size:.72rem}
+.grtx{font-family:'Share Tech Mono',monospace;font-size:.57rem;color:var(--td)}
+.gpb{display:inline-flex;align-items:center;gap:.3rem;margin-top:.55rem;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--c);border:1px solid rgba(0,245,255,.18);padding:.18rem .5rem;background:rgba(0,245,255,.04)}
+#education{background:var(--bg3)}
+.edg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-bottom:2.6rem}
+.ec{background:var(--sf);border:1px solid var(--bd);padding:1.7rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.ec:hover{border-color:var(--bb);transform:translateY(-4px)}
+.ec::before{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--c),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.ec:hover::before{transform:scaleX(1)}
+.eyr{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--c);letter-spacing:.13em;margin-bottom:.68rem}
+.edg2{font-family:'Rajdhani',sans-serif;font-size:1.02rem;font-weight:700;color:#fff;margin-bottom:.26rem;line-height:1.3}
+.esc{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--td)}
+.eb{display:inline-block;margin-top:.65rem;font-family:'Share Tech Mono',monospace;font-size:.57rem;letter-spacing:.1em;padding:.2rem .58rem;background:rgba(0,245,255,.07);color:var(--c);border:1px solid rgba(0,245,255,.17)}
+.crg{display:flex;flex-direction:column;gap:.65rem}
+.crw{background:var(--sf);border:1px solid var(--bd);padding:.85rem 1.1rem;display:flex;align-items:center;gap:.85rem;transition:border-color .3s,transform .3s}
+.crw:hover{border-color:var(--bb);transform:translateX(5px)}
+.cid{width:38px;height:38px;flex-shrink:0;background:rgba(0,245,255,.05);border:1px solid rgba(0,245,255,.13);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.57rem;font-weight:700;color:var(--c);transition:background .3s}
+.crw:hover .cid{background:rgba(0,245,255,.1)}
+.cn{font-size:.86rem;font-weight:600;color:#fff}
+.ci{font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--td);margin-top:.07rem}
+.cy{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--c);flex-shrink:0}
+#contact{background:var(--bg2)}
+.ctg{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
+.ch2{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:1.1rem;letter-spacing:.05em}
+.ch2 span{color:var(--c);text-shadow:0 0 16px rgba(0,245,255,.33)}
+.cp{font-size:.88rem;color:var(--td);line-height:1.85;margin-bottom:1.7rem}
+.cls{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.9rem}
+.cl{display:flex;align-items:center;gap:.65rem;font-family:'Share Tech Mono',monospace;font-size:.73rem;color:var(--td);text-decoration:none;transition:all .3s;padding:.32rem 0}
+.cl:hover{color:var(--c);transform:translateX(5px)}
+.cli{width:30px;height:30px;border:1px solid var(--bb);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:var(--c);flex-shrink:0;font-family:'Orbitron',monospace;transition:all .3s}
+.cl:hover .cli{background:rgba(0,245,255,.1);border-color:var(--c);box-shadow:0 0 10px rgba(0,245,255,.17)}
+.fm{display:flex;flex-direction:column;gap:.85rem}
+.fg{display:flex;flex-direction:column;gap:.28rem}
+.fl{font-family:'Share Tech Mono',monospace;font-size:.59rem;letter-spacing:.16em;color:var(--tm);transition:color .3s}
+.fg:focus-within .fl{color:var(--c)}
+.fi{background:var(--sf);border:1px solid var(--bd);padding:.68rem .9rem;color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:.78rem;outline:none;transition:border-color .3s,box-shadow .3s;border-radius:0}
+.fi:focus{border-color:var(--c);box-shadow:0 0 0 1px rgba(0,245,255,.13),inset 0 0 14px rgba(0,245,255,.022)}
+.fi::placeholder{color:var(--tm)}
+textarea.fi{resize:vertical;min-height:85px}
+.fnote{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--tm);margin-top:.18rem}
+.fnote span{color:var(--c)}
+#fst{font-family:'Share Tech Mono',monospace;font-size:.7rem;display:none;padding:.55rem .85rem;border:1px solid;margin-top:.45rem}
+#fst.ok{color:var(--g);border-color:rgba(0,255,136,.28);background:rgba(0,255,136,.055)}
+#fst.er{color:var(--r);border-color:rgba(255,51,102,.28);background:rgba(255,51,102,.055)}
+#btt{position:fixed;bottom:1.7rem;right:1.7rem;z-index:500;width:40px;height:40px;border:1px solid var(--bb);background:rgba(3,10,15,.92);color:var(--c);display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:none;transition:all .3s;opacity:0;transform:translateY(16px);backdrop-filter:blur(8px)}
+#btt.vis{opacity:1;transform:none}
+#btt:hover{background:rgba(0,245,255,.1);border-color:var(--c);box-shadow:0 0 16px rgba(0,245,255,.17)}
+footer{background:var(--bg);border-top:1px solid var(--bd);padding:1.3rem 4%;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;flex-wrap:wrap;gap:.45rem}
+footer p{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--tm)}
+footer span{color:var(--c)}
+@keyframes fu{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes glitch{0%,86%,100%{text-shadow:0 0 34px rgba(0,245,255,.13)}87%{text-shadow:-3px 0 rgba(255,0,80,.75),3px 0 rgba(0,245,255,.75)}89%{text-shadow:3px 0 rgba(255,0,80,.75),-3px 0 rgba(0,245,255,.75)}91%{text-shadow:-1px 0 rgba(180,79,255,.55),1px 0 rgba(0,245,255,.55)}93%{text-shadow:0 0 34px rgba(0,245,255,.13)}}
+@media(max-width:1100px){.gg{grid-template-columns:repeat(3,1fr)}.pg,.skg{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.hi,.ag,.ctg{grid-template-columns:1fr;gap:2.3rem}.hpanel{display:none}.edg{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.skg,.pg,.gg,.edg{grid-template-columns:1fr}.nl{display:none}.ai{grid-template-columns:1fr 1fr}section{padding:3.5rem 4%}body{cursor:auto}#cur,#ring{display:none}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="ring"></div>
+<canvas id="ptcl"></canvas>
+<div id="pbar"></div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+<nav id="nav">
+  <a href="#hero" class="nlogo">DC<span>_</span></a>
+  <ul class="nl">
+    <li><a href="#about">About</a></li><li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li><li><a href="#projects">Projects</a></li>
+    <li><a href="#games">Games</a></li><li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nst"><div class="sdot"></div>AVAILABLE FOR HIRE</div>
+</nav>
+<section id="hero">
+  <div class="hi">
+    <div>
+      <p class="htag">AI ENGINEERING STUDENT · GAME TESTER · WEB DEV // WARSAW, PL</p>
+      <h1 class="hn">DJIHAD<br><span class="acc">CHOUIKH</span></h1>
+      <p class="hsub">QA Engineer · Front-End Developer · Problem Solver</p>
+      <p id="tw"><span id="typed"></span><span class="cb"></span></p>
+      <div class="hbtns">
+        <a href="#experience" class="btn bc"><span class="bb"></span>[ View Experience ]</a>
+        <a href="#games" class="btn bp"><span class="bb"></span>[ Games I Test ]</a>
+        <a href="#contact" class="btn bg2"><span class="bb"></span>[ Hire Me ]</a>
+      </div>
+    </div>
+    <div class="hpanel">
+      <div class="pc cd"><div class="pclbl">// CURRENT ROLE</div><div class="pcv">Game Tester</div><div class="pcs">INDEPENDENT · WARSAW · JAN 2025–NOW</div></div>
+      <div class="pc pu"><div class="pclbl">// STUDYING</div><div class="pcv">Computer Engineering</div><div class="pcs">VISTULA UNIVERSITY · 2025–2029</div></div>
+      <div class="pc gr"><div class="pclbl">// ALSO EXPERIENCED IN</div><div class="pcv">Web Development</div><div class="pcs">HTML · CSS · JS · WORDPRESS · DJEZZY</div></div>
+      <div class="hst">
+        <div class="sb"><div class="sn" data-count="5">0</div><div class="sl">Roles</div></div>
+        <div class="sb"><div class="sn" data-count="4">0</div><div class="sl">Languages</div></div>
+        <div class="sb"><div class="sn" data-count="3">0</div><div class="sl">Degrees</div></div>
+        <div class="sb"><div class="sn" data-count="8">0</div><div class="sl">Games</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="about">
+  <div class="si">
+    <div class="sh rv"><div class="stg">// 01 — ABOUT</div><h2 class="sh2">System Profile</h2><div class="sln"></div></div>
+    <div class="ag">
+      <div class="rl">
+        <div class="cd">
+          <div class="pf">
+            <div class="hd tl"></div><div class="hd tr"></div><div class="hd bl"></div><div class="hd br2"></div>
+            <img src="DjyoPH.PNG" alt="Djihad Chouikh">
+            <div class="pov"></div><div class="psc"></div>
+            <div class="ptag"><div class="ptn">DJIHAD CHOUIKH</div><div class="ptr">GAME TESTER // QA ENGINEER // WARSAW</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr">
+        <div class="at">
+          <p>I'm an AI Engineering student and Computer Engineering professional based in Warsaw, Poland — trilingual, adaptable, and detail-obsessed. My background spans game testing, front-end web development, and IT project management across companies in both Poland and Algeria.</p>
+          <p>As a <strong style="color:var(--c)">Game Tester</strong> since January 2025, I conduct structured QA across PC and web games — hunting bugs, documenting defects with precision, and executing functional, regression, and usability test suites. I've built and maintained websites with HTML, CSS, JavaScript, and WordPress.</p>
+          <p>Previously at <strong style="color:var(--c)">iNFORMERS AG</strong> as IT Project Manager and at <strong style="color:var(--c)">Djezzy</strong> — Algeria's leading telecom — as Web Developer, giving me real enterprise experience from day one.</p>
+          <div class="ai">
+            <div class="ib rv d1"><div class="il">// Location</div><div class="iv">Warsaw, Poland</div></div>
+            <div class="ib rv d2"><div class="il">// Phone</div><div class="iv">+48 519 694 425</div></div>
+            <div class="ib rv d3"><div class="il">// Status</div><div class="iv" style="color:var(--g)">Open to Hire</div></div>
+            <div class="ib rv d1"><div class="il">// Email</div><div class="iv" style="font-size:.73rem">chouikhdjihad93@gmail.com</div></div>
+            <div class="ib rv d2"><div class="il">// Focus</div><div class="iv">QA · Web Dev · AI</div></div>
+            <div class="ib rv d3"><div class="il">// Origin</div><div class="iv">Algeria → Warsaw</div></div>
+          </div>
+          <div class="lr">
+            <div class="lb">AR // NATIVE</div>
+            <div class="lb">EN // FULL PROFESSIONAL</div>
+            <div class="lb">FR // PROFESSIONAL</div>
+            <div class="lb">PL // ELEMENTARY</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="skills">
+  <div class="si">
+    <div class="sh rv"><div class="stg">// 02 — SKILLS</div><h2 class="sh2">Core Capabilities</h2><div class="sln"></div></div>
+    <div class="skg">
+      <div class="skc rv d1"><div class="ss"></div><div class="si2">QA</div><h3>Game Testing & QA</h3>
+        <ul class="skl">
+          <li>Bug identification & reporting<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li>Test case execution<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li>Functional testing<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Regression testing<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Usability testing<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Defect documentation<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+        </ul>
+      </div>
+      <div class="skc p2 rv d2"><div class="ss"></div><div class="si2" style="color:var(--p)">WEB</div><h3>Web Development</h3>
+        <ul class="skl">
+          <li>HTML / CSS<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>JavaScript<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li>WordPress / CMS<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Responsive design<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Hosting & domains<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>UI debugging<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+        </ul>
+      </div>
+      <div class="skc gc rv d3"><div class="ss"></div><div class="si2" style="color:var(--g)">SYS</div><h3>IT & Project Skills</h3>
+        <ul class="skl">
+          <li>Project management<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Analytical thinking<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li>Attention to detail<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li>Data structures<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li>Embedded systems<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li>Team collaboration<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+        </ul>
+      </div>
+      <div class="skc ac rv d4"><div class="ss"></div><div class="si2" style="color:var(--a)">AI</div><h3>AI & Emerging Tech</h3>
+        <ul class="skl">
+          <li>AI tools & prompting<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Automation basics<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li>Problem-solving<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li>Research & analysis<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+        </ul>
+      </div>
+      <div class="skc rv d5" style="grid-column:span 2"><div class="ss"></div><div class="si2">TOOLS</div><h3>Tools & Technologies</h3>
+        <ul class="skl" style="display:grid;grid-template-columns:1fr 1fr;gap:0 2rem">
+          <li>HTML / CSS / JavaScript<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>WordPress<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Bug tracking tools<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li>Git / Version control<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li>Browser DevTools<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li>Domain & hosting mgmt<div class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="experience">
+  <div class="si">
+    <div class="sh rv"><div class="stg">// 03 — EXPERIENCE</div><h2 class="sh2">Mission Log</h2><div class="sln"></div></div>
+    <div class="tl2">
+      <div class="ti rv d1">
+        <div class="td"></div>
+        <div class="tdt">JAN 2025 — PRESENT</div><div class="tr2">Game Tester</div><div class="tc">INDEPENDENT // WARSAW, POLAND</div>
+        <ul class="tls">
+          <li>Conducted comprehensive testing of PC and web-based games to identify bugs, glitches, and usability issues</li>
+          <li>Created structured bug reports and documented testing outcomes with detailed reproduction steps</li>
+          <li>Executed QA workflows: functional, regression, and usability testing across multiple titles</li>
+          <li>Collaborated with online communities to gather feedback and improve gameplay experience</li>
+          <li>Developed deep understanding of game lifecycle, release cycles, and team-based QA processes</li>
+        </ul>
+      </div>
+      <div class="ti rv d2">
+        <div class="td" style="border-color:var(--p)"></div>
+        <div class="tdt" style="color:var(--p)">JUN 2023 — PRESENT</div><div class="tr2">Junior Web / Front-End Developer</div><div class="tc">INDEPENDENT</div>
+        <ul class="tls">
+          <li>Built and maintained websites using HTML, CSS, JavaScript, and WordPress CMS</li>
+          <li>Implemented responsive design across multiple devices and screen sizes</li>
+          <li>Managed hosting environments and domain configurations for client sites</li>
+          <li>Tested websites for usability, performance, and cross-browser compatibility</li>
+        </ul>
+      </div>
+      <div class="ti rv d3">
+        <div class="td" style="border-color:var(--a)"></div>
+        <div class="tdt" style="color:var(--a)">JUL 2024 — AUG 2024</div><div class="tr2">IT Project Manager</div><div class="tc">iNFORMERS AG // WARSAW, POLAND</div>
+        <ul class="tls">
+          <li>Coordinated IT-related tasks and tracked project progress in an international environment</li>
+          <li>Communicated updates and blockers between stakeholders to ensure smooth delivery</li>
+          <li>Managed documentation and supported workflows for ongoing IT initiatives</li>
+        </ul>
+      </div>
+      <div class="ti rv d4">
+        <div class="td" style="border-color:var(--g)"></div>
+        <div class="tdt" style="color:var(--g)">MAR 2023 — AUG 2023</div><div class="tr2">Web Developer</div><div class="tc">DJEZZY // MOSTAGANEM, ALGERIA</div>
+        <ul class="tls">
+          <li>Developed and maintained web solutions for Algeria's leading telecom company</li>
+          <li>Built responsive interfaces and contributed to internal web tooling</li>
+          <li>Gained real-world enterprise experience in a fast-paced corporate environment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="projects">
+  <div class="si">
+    <div class="sh rv"><div class="stg">// 04 — PROJECTS</div><h2 class="sh2">Work Examples</h2><div class="sln"></div></div>
+    <div class="pg">
+      <div class="prc rv d1">
+        <div class="pt pt1"><span>BUG</span><div class="ptag2 pc2t">QA</div></div>
+        <div class="pb"><div class="pcat">// Game Testing</div><div class="ptit">Structured Bug Report System</div><div class="pdsc">Personal bug-tracking template covering severity levels, reproduction steps, environment info, and expected vs actual behavior. Used across all game testing sessions.</div><div class="pstk"><span class="pst">Bug Tracking</span><span class="pst">Documentation</span><span class="pst">QA Process</span></div></div>
+      </div>
+      <div class="prc rv d2">
+        <div class="pt pt2"><span>WEB</span><div class="ptag2 pp2t">Web Dev</div></div>
+        <div class="pb"><div class="pcat">// Web Development</div><div class="ptit">Responsive Business Website</div><div class="pdsc">Multi-page business website with full responsive layout using HTML, CSS, and JS. Managed hosting, domain configuration, and SEO optimization.</div><div class="pstk"><span class="pst">HTML</span><span class="pst">CSS</span><span class="pst">JavaScript</span><span class="pst">Hosting</span></div></div>
+      </div>
+      <div class="prc rv d3">
+        <div class="pt pt3"><span>CMS</span><div class="ptag2 pg2t">WordPress</div></div>
+        <div class="pb"><div class="pcat">// Web Development</div><div class="ptit">WordPress Site with Custom Theme</div><div class="pdsc">WordPress website with custom theme modifications, plugin integration, and mobile responsiveness. Handled all client content updates and performance tuning.</div><div class="pstk"><span class="pst">WordPress</span><span class="pst">PHP</span><span class="pst">CSS</span><span class="pst">Plugins</span></div></div>
+      </div>
+      <div class="prc rv d1">
+        <div class="pt pt1"><span>QA</span><div class="ptag2 pc2t">Testing</div></div>
+        <div class="pb"><div class="pcat">// QA Process</div><div class="ptit">Game Lifecycle QA Workflow</div><div class="pdsc">Full QA workflow for indie games covering pre-alpha, beta, and release phases. Includes smoke testing, regression cycles, and post-release bug monitoring.</div><div class="pstk"><span class="pst">QA</span><span class="pst">Process Design</span><span class="pst">Docs</span></div></div>
+      </div>
+      <div class="prc rv d2">
+        <div class="pt pt2"><span>DJZ</span><div class="ptag2 pp2t">Enterprise</div></div>
+        <div class="pb"><div class="pcat">// Web Dev @ Djezzy</div><div class="ptit">Telecom Internal Web Tools</div><div class="pdsc">Internal web interfaces developed at Djezzy — Algeria's top telecom. Front-end tooling used by internal teams, focused on usability and maintainability.</div><div class="pstk"><span class="pst">HTML</span><span class="pst">CSS</span><span class="pst">JS</span><span class="pst">Enterprise</span></div></div>
+      </div>
+      <div class="prc rv d3">
+        <div class="pt pt3"><span>PORT</span><div class="ptag2 pg2t">Personal</div></div>
+        <div class="pb"><div class="pcat">// Personal Project</div><div class="ptit">This Portfolio Website</div><div class="pdsc">Designed and built from scratch — custom cursor, particle network, scroll animations, typing effects, hologram photo, games showcase, and working contact form.</div><div class="pstk"><span class="pst">HTML</span><span class="pst">CSS</span><span class="pst">JS</span><span class="pst">Design</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="games">
+  <div class="si">
+    <div class="sh rv"><div class="stg">// 05 — GAMES EXPERTISE</div><h2 class="sh2">Games I Test & Play</h2><div class="sln"></div></div>
+    <p class="gintro rv">As a game tester, I bring authentic player knowledge to every QA session. I've logged hundreds of hours across competitive FPS, battle royale, sandbox, and MOBA titles — catching issues that generic testers miss. <strong style="color:var(--c)">Hover any card</strong> to learn about each game.</p>
+    <div class="gg">
+      <div class="gc2 rv d1">
+        <div class="gth gv"><div class="gbg gfps">FPS · TACTICAL</div><span class="gico">🎯</span></div>
+        <div class="gbdy"><div class="gtt">Valorant</div><div class="gdv">// Riot Games · 2020</div><div class="gdc">5v5 tactical shooter with unique agent abilities. One of the most tested competitive FPS titles — rich edge cases in hitboxes, ability interactions, and anti-cheat systems.</div><div class="grt"><span class="gstr">★★★★★</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ ACTIVELY TESTING</div></div>
+      </div>
+      <div class="gc2 rv d2">
+        <div class="gth gm"><div class="gbg gsnd">SANDBOX</div><span class="gico">⛏️</span></div>
+        <div class="gbdy"><div class="gtt">Minecraft</div><div class="gdv">// Mojang · 2011</div><div class="gdc">The world's best-selling sandbox game. Excellent for testing world-generation bugs, multiplayer sync issues, and mod compatibility. A QA goldmine with endless edge cases.</div><div class="grt"><span class="gstr">★★★★★</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ 1000+ HOURS</div></div>
+      </div>
+      <div class="gc2 rv d3">
+        <div class="gth gcs"><div class="gbg gfps">FPS · COMPETITIVE</div><span class="gico">💥</span></div>
+        <div class="gbdy"><div class="gtt">Counter-Strike 2</div><div class="gdv">// Valve · 2023</div><div class="gdc">The legendary tactical shooter reborn on Source 2. CS2's new smoke system and subtick architecture introduce unique testing challenges around physics and netcode.</div><div class="grt"><span class="gstr">★★★★★</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ ACTIVELY TESTING</div></div>
+      </div>
+      <div class="gc2 rv d4">
+        <div class="gth gax"><div class="gbg gbr">BATTLE ROYALE</div><span class="gico">🔫</span></div>
+        <div class="gbdy"><div class="gtt">Apex Legends</div><div class="gdv">// Respawn · 2019</div><div class="gdc">Fast-paced hero-based battle royale. Great for testing ability cooldown bugs, loot table distribution, and cross-platform netcode issues.</div><div class="grt"><span class="gstr">★★★★☆</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ TESTED EXTENSIVELY</div></div>
+      </div>
+      <div class="gc2 rv d1">
+        <div class="gth gl"><div class="gbg gmb">MOBA</div><span class="gico">⚔️</span></div>
+        <div class="gbdy"><div class="gtt">League of Legends</div><div class="gdv">// Riot Games · 2009</div><div class="gdc">The world's most-played MOBA. Champion interactions, item synergies, and patch-based regression testing make it one of the richest QA environments.</div><div class="grt"><span class="gstr">★★★★☆</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ COMPETITIVE RANKED</div></div>
+      </div>
+      <div class="gc2 rv d2">
+        <div class="gth gcod"><div class="gbg gfps">FPS · ACTION</div><span class="gico">🪖</span></div>
+        <div class="gbdy"><div class="gtt">Call of Duty: Warzone</div><div class="gdv">// Activision · 2020</div><div class="gdc">Massive battle royale with 150 players. Constant seasonal updates make it ideal for regression testing, weapon balance checks, and audio/visual bug hunting.</div><div class="grt"><span class="gstr">★★★★☆</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ MULTI-SEASON TESTED</div></div>
+      </div>
+      <div class="gc2 rv d3">
+        <div class="gth gr6"><div class="gbg gfps">FPS · TACTICAL</div><span class="gico">🛡️</span></div>
+        <div class="gbdy"><div class="gtt">Rainbow Six Siege</div><div class="gdv">// Ubisoft · 2015</div><div class="gdc">Hyper-realistic tactical shooter with destructible environments. Gadget interactions, breach mechanics, and hitbox precision make it one of the most QA-intensive titles.</div><div class="grt"><span class="gstr">★★★★☆</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ GADGET BUG TESTING</div></div>
+      </div>
+      <div class="gc2 rv d4">
+        <div class="gth gow"><div class="gbg gfps">FPS · HERO</div><span class="gico">🦸</span></div>
+        <div class="gbdy"><div class="gtt">Overwatch 2</div><div class="gdv">// Blizzard · 2022</div><div class="gdc">Team-based hero shooter with 35+ unique heroes. Thousands of ability interaction edge cases — perfect for systematic QA focused on cooldowns and team synergy bugs.</div><div class="grt"><span class="gstr">★★★★☆</span><span class="grtx">Proficiency</span></div><div class="gpb">▶ HERO INTERACTION QA</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="education">
+  <div class="si">
+    <div class="sh rv"><div class="stg">// 06 — EDUCATION</div><h2 class="sh2">Training & Credentials</h2><div class="sln"></div></div>
+    <div class="edg">
+      <div class="ec rl d1"><div class="eyr">2025 — 2029</div><div class="edg2">B.Sc. Computer Engineering</div><div class="esc">Vistula University · Warsaw, Poland</div><div class="eb">IN PROGRESS</div></div>
+      <div class="ec rv d2"><div class="eyr">2023 — 2025</div><div class="edg2">B.Sc. Computer Engineering</div><div class="esc">Menedżerska Akademia Nauk Stosowanych w Warszawie</div><div class="eb" style="background:rgba(0,255,136,.06);color:var(--g);border-color:rgba(0,255,136,.17)">COMPLETED</div></div>
+      <div class="ec rr d3"><div class="eyr">2022 — 2023</div><div class="edg2">B.Sc. Computer Science</div><div class="esc">Université de Mostaganem · Algeria</div><div class="eb" style="background:rgba(0,255,136,.06);color:var(--g);border-color:rgba(0,255,136,.17)">COMPLETED</div></div>
+    </div>
+    <div class="stg rv" style="margin-bottom:.9rem">// CERTIFICATIONS & TARGET CREDENTIALS</div>
+    <div class="crg">
+      <div class="crw rv d1"><div class="cid">ISTQB</div><div><div class="cn">ISTQB Foundation Level — Software Testing</div><div class="ci">International Software Testing Qualifications Board</div></div><div class="cy" style="color:var(--a)">TARGET</div></div>
+      <div class="crw rv d2"><div class="cid">AWS</div><div><div class="cn">AWS Certified Cloud Practitioner</div><div class="ci">Amazon Web Services</div></div><div class="cy" style="color:var(--a)">TARGET</div></div>
+      <div class="crw rv d3"><div class="cid" style="color:var(--g);border-color:rgba(0,255,136,.17)">LIN</div><div><div class="cn">LinkedIn Learning — QA & Web Fundamentals</div><div class="ci">LinkedIn Learning</div></div><div class="cy" style="color:var(--g)">2024</div></div>
+      <div class="crw rv d4"><div class="cid" style="color:var(--p);border-color:rgba(180,79,255,.17)">CS50</div><div><div class="cn">CS50: Introduction to Computer Science</div><div class="ci">Harvard University / edX</div></div><div class="cy" style="color:var(--p)">2023</div></div>
+    </div>
+  </div>
+</section>
+<section id="contact">
+  <div class="si">
+    <div class="sh rv"><div class="stg">// 07 — CONTACT</div><h2 class="sh2">Open Channel</h2><div class="sln"></div></div>
+    <div class="ctg">
+      <div class="rl">
+        <h2 class="ch2">Let's build<br>something <span>legendary</span><br>together.</h2>
+        <p class="cp">Open to junior QA, game testing, and web developer roles. Based in Warsaw — on-site, hybrid, or remote. I respond fast.</p>
+        <div class="cls">
+          <a href="mailto:chouikhdjihad93@gmail.com" class="cl"><div class="cli">@</div>chouikhdjihad93@gmail.com</a>
+          <a href="tel:+48519694425" class="cl"><div class="cli">TEL</div>+48 519 694 425</a>
+          <a href="https://www.linkedin.com/in/djihad-chouikh-88695a337" class="cl" target="_blank"><div class="cli">IN</div>linkedin.com/in/djihad-chouikh-88695a337</a>
+          <a href="https://github.com/Djyo27" class="cl" target="_blank"><div class="cli">GH</div>github.com/Djyo27</a>
+          <a href="Djihad_Chouikh_CV.pdf" class="cl" download><div class="cli">CV</div>Download Resume (PDF)</a>
+        </div>
+      </div>
+      <div class="rr">
+        <form class="fm" id="cf" onsubmit="sendForm(event)">
+          <div class="fg"><label class="fl" for="fn">// FULL NAME *</label><input type="text" id="fn" class="fi" placeholder="Your full name" required></div>
+          <div class="fg"><label class="fl" for="fe">// EMAIL ADDRESS *</label><input type="email" id="fe" class="fi" placeholder="your@email.com" required></div>
+          <div class="fg"><label class="fl" for="fs">// SUBJECT *</label><input type="text" id="fs" class="fi" placeholder="Job opportunity / Internship / Collaboration" required></div>
+          <div class="fg"><label class="fl" for="fm">// MESSAGE *</label><textarea id="fm" class="fi" placeholder="Tell me about the role or project..." required></textarea></div>
+          <p class="fnote">Clicking send opens your email client pre-filled — <span>guaranteed delivery</span>.</p>
+          <div id="fst"></div>
+          <button type="submit" class="btn bc" style="border-radius:0;margin-top:.3rem"><span class="bb"></span>[ SEND MESSAGE ]</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <p>// <span>DJIHAD CHOUIKH</span> — GAME TESTER · QA ENGINEER · WEB DEVELOPER</p>
+  <p>WARSAW, PL // <span>2025</span> // <span>+48 519 694 425</span></p>
+</footer>
+<script>
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('a,button,input,textarea').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='5px';cur.style.height='5px';cur.style.background='var(--p)';ring.style.width='46px';ring.style.height='46px';ring.style.borderColor='rgba(180,79,255,.48)'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';cur.style.background='var(--c)';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(0,245,255,.45)'});
+});
+const pb=document.getElementById('pbar'),nav=document.getElementById('nav'),btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  pb.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  nav.classList.toggle('sc',h.scrollTop>80);
+  btt.classList.toggle('vis',h.scrollTop>400);
+  let ac='';
+  document.querySelectorAll('section[id]').forEach(s=>{if(window.scrollY>=s.offsetTop-130)ac=s.id});
+  document.querySelectorAll('.nl a').forEach(a=>a.classList.toggle('ac',a.getAttribute('href')==='#'+ac));
+});
+const cv=document.getElementById('ptcl'),cx=cv.getContext('2d');
+let W,H;
+const rsz=()=>{W=cv.width=window.innerWidth;H=cv.height=window.innerHeight};
+rsz();window.addEventListener('resize',rsz);
+const pts=Array.from({length:68},()=>({x:Math.random()*1920,y:Math.random()*1080,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.3+.25,c:Math.random()>.72?'rgba(180,79,255,':'rgba(0,245,255,'}));
+(function dp(){cx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle=p.c+'.48)';cx.fill()});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<108){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.strokeStyle=`rgba(0,245,255,${.048*(1-d/108)})`;cx.lineWidth=.5;cx.stroke()}}requestAnimationFrame(dp)})();
+const lines=['Passionate game tester with sharp bug-hunting instincts.','Web developer: HTML, CSS, JavaScript & WordPress.','Computer Engineering student at Vistula University, Warsaw.','Worked at Djezzy (Algeria) & iNFORMERS AG (Poland).','4 languages. 3 degrees. 5 roles. Unstoppable.'];
+let li=0,ci=0,del=false,tel=document.getElementById('typed');
+function typ(){tel.textContent=del?lines[li].slice(0,ci-1):lines[li].slice(0,ci+1);del?ci--:ci++;if(!del&&ci===lines[li].length){del=true;setTimeout(typ,2400);return}if(del&&ci===0){del=false;li=(li+1)%lines.length;setTimeout(typ,420);return}setTimeout(typ,del?30:48)}
+typ();
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')}),{threshold:.07,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv,.rl,.rr').forEach(e=>obs.observe(e));
+const lo=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')}),{threshold:.3});
+document.querySelectorAll('.sln').forEach(e=>lo.observe(e));
+const co=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting&&x.target.dataset.count){const t=+x.target.dataset.count;let c=0;const s=()=>{x.target.textContent=(++c)+'+';if(c<t)setTimeout(s,108)};s();co.unobserve(x.target)}}),{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(e=>co.observe(e));
+document.querySelectorAll('.skc').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%')})});
+function sendForm(e){
+  e.preventDefault();
+  const n=document.getElementById('fn').value.trim(),em=document.getElementById('fe').value.trim(),s=document.getElementById('fs').value.trim(),m=document.getElementById('fm').value.trim();
+  if(!n||!em||!s||!m){showSt('Please fill in all required fields.','er');return}
+  const body='Name: '+n+'\nEmail: '+em+'\n\nMessage:\n'+m;
+  window.location.href='mailto:chouikhdjihad93@gmail.com?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(body);
+  showSt('✓ Your email client is opening with the message ready to send!','ok');
+  setTimeout(()=>document.getElementById('cf').reset(),2200);
+}
+function showSt(msg,type){const s=document.getElementById('fst');s.textContent=msg;s.className=type;s.style.display='block';setTimeout(()=>s.style.display='none',7000)}
+</script>
+</body>
+</html>
